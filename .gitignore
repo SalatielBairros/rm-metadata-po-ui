@@ -9,6 +9,7 @@
 
 # dependencies
 /node_modules
+package-lock.json
 
 # profiling files
 chrome-profiler-events*.json
@@ -44,3 +45,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Config Files
+src/assets/config.json
