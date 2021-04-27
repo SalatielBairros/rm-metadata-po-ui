@@ -20,12 +20,6 @@ export class MetadadosService {
       .get<Formulario>('hcg/v1/pep/practitioners/UserData/')
       .pipe(
         map((usuario: any) => {
-          console.log(
-            (<Array<any>>usuario.permissions[1].children)
-              .filter((p) => p.isMetadata == true)
-              .map((p) => new Formulario(p.id, p.description, p.apiRoute))
-          );
-
           return (<Array<any>>usuario.permissions[1].children)
             .filter((p) => p.isMetadata == true)
             .map((p) => new Formulario(p.id, p.description, p.apiRoute));
@@ -75,6 +69,14 @@ export class MetadadosService {
           }
         }
       );
+  }
+
+  public obterTodos(
+    projeto: string,
+  ): Observable<any> {
+
+    const uri = `framework/v1/metadata/data/${projeto}`;
+    return this._http.get(uri);
   }
 
   // public obterTituloMetadado(projeto: string) {
