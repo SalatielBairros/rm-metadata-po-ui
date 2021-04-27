@@ -1,0 +1,13 @@
+<po-page-default [p-title]="title">
+  <po-dynamic-form
+    [p-fields]="layout"
+    [(p-value)]="model"
+    [p-validate]="this.validar.bind(this)"
+  ></po-dynamic-form>
+
+  <!-- <div class="autosave-info">
+    <div class="flex-1">
+      <small>{{ lastSaveInfo }}</small>
+    </div>
+  </div> -->
+</po-page-default>
