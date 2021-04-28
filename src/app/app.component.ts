@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
         (f) =>
           <PoMenuItem>{
             label: f.description,
+            link: `/metadados/${f.apiRoute}`
           }
       );
     });

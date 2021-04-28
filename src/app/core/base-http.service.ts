@@ -8,7 +8,7 @@ import { ConfigService } from './config.service';
   providedIn: 'root',
 })
 export class BaseHttpService {
-  private _config: AppConfig;
+  public config: AppConfig;
   private _httpOptions = {
     headers: new HttpHeaders(),
   };
@@ -17,17 +17,17 @@ export class BaseHttpService {
     private _http: HttpClient,
     private _configService: ConfigService
   ) {
-    this._config = _configService.get();
+    this.config = _configService.get();
     this._httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: `Basic ${this._config.userToken}`,
+        Authorization: `Basic ${this.config.userToken}`,
       }),
     };
   }
 
   public get<T>(route: string): Observable<T> {
-    const url = `${this._config.apiUrl}/${route}`;
+    const url = `${this.config.apiUrl}/${route}`;
     return this._http.get<T>(url, this._httpOptions);
   }
 }
