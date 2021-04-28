@@ -7,7 +7,7 @@ import { PoModule } from '@po-ui/ng-components';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MetadadosModule } from './metadados/metadados.module';
-import { HomeModule } from './Home/home.module';
+import { HomeModule } from './home/home.module';
 import { HttpRequestInterceptorService } from './core/http-request-interceptor.service';
 
 @NgModule({

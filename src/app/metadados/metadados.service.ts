@@ -12,7 +12,6 @@ export class MetadadosService {
   private _schemas: { [projeto: string]: Array<PoDynamicFormField> } = {};
   private _menus: { [projeto: string]: Formulario } = {};
   private _frameworkApiUrl = 'framework/v1';
-  private _schemaApi = this._frameworkApiUrl + '/metadata/schema/form';
 
   constructor(private _http: BaseHttpService) {}
 
@@ -47,7 +46,7 @@ export class MetadadosService {
     }
 
     this._http
-      .get<Array<PoDynamicFormField>>(`${this._schemaApi}/${projeto}`)
+      .get<Array<PoDynamicFormField>>(`framework/v1/metadata/schema/form/${projeto}`)
       .pipe(
         map((fields) =>
           fields.map((f) => {
