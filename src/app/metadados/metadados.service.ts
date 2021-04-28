@@ -10,6 +10,7 @@ import { PoDynamicFormField } from '@po-ui/ng-components';
 })
 export class MetadadosService {
   private _schemas: { [projeto: string]: Array<PoDynamicFormField> } = {};
+  private _menus: { [projeto: string]: Formulario } = {};
   private _frameworkApiUrl = 'framework/v1';
   private _schemaApi = this._frameworkApiUrl + '/metadata/schema/form';
 
@@ -22,7 +23,15 @@ export class MetadadosService {
         map((usuario: any) => {
           return (<Array<any>>usuario.permissions[1].children)
             .filter((p) => p.isMetadata == true)
-            .map((p) => new Formulario(p.id, p.description, p.apiRoute));
+            .map((p) => {
+              const formulario = new Formulario(
+                p.id,
+                p.description,
+                p.apiRoute
+              );
+              this._menus[formulario.apiRoute] = formulario;
+              return formulario;
+            });
         })
       );
   }
@@ -52,6 +61,10 @@ export class MetadadosService {
 
             if (!!f.searchService) {
               f.searchService = `${this._http.config.apiUrl}/${this._frameworkApiUrl}/${f.searchService}`;
+            }
+
+            if (!!f.booleanTrue && !!f.booleanFalse) {
+              f.type = 'boolean';
             }
 
             return f;
@@ -87,11 +100,18 @@ export class MetadadosService {
     dado: any,
     projeto: string
   ): Observable<any> {
-    if (chavePrimaria.length > 0) {
+    if (!!chavePrimaria && !!chavePrimaria.length) {
       return this._atualizar(chavePrimaria, dado, projeto);
     } else {
       return this._criar(dado, projeto);
     }
+  }
+
+  public chamarFormulaVisualValidacaoCampo(
+    url_workflow: string,
+    dados: any
+  ): Observable<any> {
+    return this._http.postByUrl(url_workflow, dados);
   }
 
   private _criar(dado: any, projeto: string): Observable<any> {
@@ -113,17 +133,11 @@ export class MetadadosService {
     );
   }
 
-  // public obterTituloMetadado(projeto: string) {
-  //   for (const iterator of context.user.permissions) {
-  //     const customizacao = iterator.children.find((c) =>
-  //       c.apiRoute.includes(projeto)
-  //     );
+  public obterTituloMetadado(projeto: string) {
+    if (!!this._menus[projeto]) {
+      return this._menus[projeto].description;
+    }
 
-  //     if (!!customizacao) {
-  //       return customizacao.description;
-  //     }
-  //   }
-
-  //   return '';
-  // }
+    return 'Formulário Dinâmico';
+  }
 }

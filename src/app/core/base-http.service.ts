@@ -41,6 +41,10 @@ export class BaseHttpService {
     return this._http.put<T>(url, model, this._httpOptions);
   }
 
+  public postByUrl<T>(url: string, body: any): Observable<T> {
+    return this._http.post<T>(url, body, this._httpOptions);
+  }
+
   public delete(route: string, chave:string): Observable<any>{
     const url = `${this.config.apiUrl}/${route}/${chave}`;
     return this._http.delete(url, this._httpOptions);

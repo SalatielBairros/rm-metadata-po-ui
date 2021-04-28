@@ -1,15 +1,14 @@
-<po-page-default [p-title]="title" [p-actions]="acoesTela">
+<po-page-default [p-title]="titulo" [p-actions]="acoesTela">
   <po-dynamic-form
     [p-fields]="layout"
     [(p-value)]="model"
+    [p-validate]="this.validarCampos.bind(this)"
   ></po-dynamic-form>
 
-  <!-- 
-    [p-validate]="this.validar.bind(this)"
-    
-    <div class="autosave-info">
-    <div class="flex-1">
-      <small>{{ lastSaveInfo }}</small>
-    </div>
-  </div> -->
+  <po-loading-overlay
+    [p-screen-lock]="false"
+    p-text="Carregando..."
+    *ngIf="loading"
+  >
+  </po-loading-overlay>
 </po-page-default>

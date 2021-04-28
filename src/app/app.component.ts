@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoMenuItem } from '@po-ui/ng-components';
+import { PoMenuItem, PoNotificationService } from '@po-ui/ng-components';
 import { MetadadosService } from './metadados/metadados.service';
 
 @Component({
@@ -16,26 +16,37 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  constructor(private metadataSerivce: MetadadosService) {}
+  constructor(
+    private _metadataSerivce: MetadadosService,
+    private _notification: PoNotificationService
+  ) {}
 
   public ngOnInit() {
-    this.metadataSerivce.obterListaFormularios().subscribe((formularios) => {
-      this.menus = [
-        <PoMenuItem>{
-          label: 'Home',
-          link: '',
-        },
-      ];
-
-      const menusFormularios = formularios.map(
-        (f) =>
+    this._metadataSerivce.obterListaFormularios().subscribe(
+      (formularios) => {
+        this.menus = [
           <PoMenuItem>{
-            label: f.description,
-            link: `/metadados/${f.apiRoute}`,
-          }
-      );
+            label: 'Home',
+            link: '/',
+          },
+        ];
 
-      this.menus.push(...menusFormularios);
-    });
+        const menusFormularios = formularios.map(
+          (f) =>
+            <PoMenuItem>{
+              label: f.description,
+              link: `/metadados/${f.apiRoute}`,
+            }
+        );
+
+        this.menus.push(...menusFormularios);
+      },
+      (error) => {
+        console.log(error);
+        this._notification.error(
+          'Erro ao carregar menus do usuario para metadados.'
+        );
+      }
+    );
   }
 }

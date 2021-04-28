@@ -4,6 +4,8 @@ import {
   PoNotificationService,
   PoPageAction,
   PoTableAction,
+  PoTableColumn,
+  PoDynamicFormField,
 } from '@po-ui/ng-components';
 import { MetadadosService } from '../metadados.service';
 
@@ -14,7 +16,11 @@ import { MetadadosService } from '../metadados.service';
 })
 export class VisualizacaoDinamicaComponent implements OnInit {
   private _idProjeto!: string;
+
+  public titulo: string = 'Formulário Dinâmico';
   public dados: Array<any> = [];
+  public colunas: Array<PoTableColumn> = [];
+  public carregando = false;
   public acoesTela: Array<PoPageAction> = [
     {
       label: 'Novo',
@@ -42,11 +48,12 @@ export class VisualizacaoDinamicaComponent implements OnInit {
 
   ngOnInit(): void {
     this._carregarParametros();
-    this._carregarList();
+    this._carregarSchema();
   }
 
-  private _carregarList() {
+  private _carregarLista() {
     if (!!this._idProjeto) {
+      this.carregando = true;
       this._metadados.obterTodos(this._idProjeto).subscribe(
         (ret) => {
           this.dados = ret.items;
@@ -56,8 +63,38 @@ export class VisualizacaoDinamicaComponent implements OnInit {
           this._notification.error(
             'Erro ao carregar lista dos registros do formulário.'
           );
-        }
+        },
+        () => (this.carregando = false)
       );
+    }
+  }
+
+  private _carregarSchema() {
+    if (!!this._idProjeto) {
+      this.carregando = true;
+      this.titulo = this._metadados.obterTituloMetadado(this._idProjeto);
+      const onSuccess = (schema: Array<PoDynamicFormField>) => {
+        this.colunas = schema.map((campo) => {
+          return <PoTableColumn>{
+            label: campo.label,
+            type: campo.type,
+            property: campo.property,
+            visible: campo.visible,
+            tooltip: campo.help,
+            format: campo.format,
+          };
+        });
+        this._carregarLista();
+      };
+      const onError = (error: any) => {
+        console.error(error);
+        this._notification.error(
+          'Erro ao carregar lista dos registros do formulário.'
+        );
+        this.carregando = false;
+      };
+
+      this._metadados.obterSchema(this._idProjeto, onSuccess, onError);
     }
   }
 
@@ -76,14 +113,16 @@ export class VisualizacaoDinamicaComponent implements OnInit {
 
   private _excluirRegistro(registro: any) {
     if (!!registro && !!registro.id) {
+      this.carregando = true;
       this._metadados.deletar(registro.id, this._idProjeto).subscribe(
         () => {
-          this._carregarList();
+          this._carregarLista();
           this._notification.success('Registro excluído com sucesso');
         },
         (error) => {
           this._notification.error('Erro ao excluir registro');
           console.error(error);
+          this.carregando = false;
         }
       );
     }
