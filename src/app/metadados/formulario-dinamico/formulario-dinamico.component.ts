@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PoDynamicFormField, PoPageAction } from '@po-ui/ng-components';
+import {
+  PoDynamicFormField,
+  PoNotificationService,
+  PoPageAction,
+} from '@po-ui/ng-components';
 import { MetadadosService } from '../metadados.service';
 
 @Component({
@@ -24,13 +28,14 @@ export class FormularioDinamicoComponent implements OnInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _metadados: MetadadosService
+    private _metadados: MetadadosService,
+    private _notification: PoNotificationService
   ) {}
 
   ngOnInit(): void {
     this._getParams();
     this._getSchema();
-    this._carregar()
+    this._carregar();
   }
 
   // public validar(formulario: any): boolean {
@@ -65,7 +70,16 @@ export class FormularioDinamicoComponent implements OnInit {
 
   private _salvarRegistro() {
     console.log(this.model);
-    this._metadados.salvar(this._idRegistro, this.model, this._idProjeto)
-      .subscribe();
+    this._metadados
+      .salvar(this._idRegistro, this.model, this._idProjeto)
+      .subscribe(
+        (ret) => {
+          this._notification.success('Registro salvo com sucesso.');
+        },
+        (error) => {
+          this._notification.error('Erro ao salvar registro.');
+          console.error(error);
+        }
+      );
   }
 }

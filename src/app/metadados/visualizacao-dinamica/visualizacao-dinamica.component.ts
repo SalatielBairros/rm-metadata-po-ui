@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoPageAction, PoTableAction } from '@po-ui/ng-components';
+import {
+  PoNotificationService,
+  PoPageAction,
+  PoTableAction,
+} from '@po-ui/ng-components';
 import { MetadadosService } from '../metadados.service';
 
 @Component({
@@ -32,7 +36,8 @@ export class VisualizacaoDinamicaComponent implements OnInit {
   constructor(
     private _metadados: MetadadosService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private _notification: PoNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -42,9 +47,17 @@ export class VisualizacaoDinamicaComponent implements OnInit {
 
   private _carregarList() {
     if (!!this._idProjeto) {
-      this._metadados.obterTodos(this._idProjeto).subscribe((ret) => {
-        this.dados = ret.items;
-      });
+      this._metadados.obterTodos(this._idProjeto).subscribe(
+        (ret) => {
+          this.dados = ret.items;
+        },
+        (error) => {
+          console.error(error);
+          this._notification.error(
+            'Erro ao carregar lista dos registros do formulário.'
+          );
+        }
+      );
     }
   }
 
@@ -63,9 +76,16 @@ export class VisualizacaoDinamicaComponent implements OnInit {
 
   private _excluirRegistro(registro: any) {
     if (!!registro && !!registro.id) {
-      this._metadados.deletar(registro.id, this._idProjeto).subscribe(() => {
-        this._carregarList();
-      });
+      this._metadados.deletar(registro.id, this._idProjeto).subscribe(
+        () => {
+          this._carregarList();
+          this._notification.success('Registro excluído com sucesso');
+        },
+        (error) => {
+          this._notification.error('Erro ao excluir registro');
+          console.error(error);
+        }
+      );
     }
   }
 }
