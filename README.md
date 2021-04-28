@@ -1,27 +1,18 @@
-# PoRmMetadataApi
+# Integração PO-UI Dynamic Form com TOTVS RM Metadata API
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.3.
+Projeto exemplo da integração entre a API de Metadados do TOTVS RM com o componente de Dynamic Form do PO-UI, utilizando Angular 11.
 
-## Development server
+## Execução
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Rodar localmente
+Para rodar o projeto localmente, execute `ng serve` para um servidor de desenvolvimento. Navegue para `http://localhost:4200/` (porta configurada como padrão). Para abrir automaticamente, basta rodar o comando `ng serve --open` ou `ng s -o`.
 
-## Code scaffolding
+### Build
+Para buildar o projeto, basta executar `npm run build`. Os artefatos serão salvos em `dist/`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Testes unitários
+Para rodar os testes unitários, basta executar `npm run test`. Eles serão executados via [Karma](https://karma-runner.github.io).
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Documentações relacionadas
+- [PO-UI Dynamic Form](https://po-ui.io/documentation/po-dynamic-form)
+- [TOTVS RM Metadata API](https://tdn.totvs.com/display/LRM/API+Metadados)
