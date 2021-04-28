@@ -15,3 +15,4 @@ Para rodar os testes unitários, basta executar `npm run test`. Eles serão exec
 
 ## Documentações relacionadas
 - [PO-UI Dynamic Form](https://po-ui.io/documentation/po-dynamic-form)
+- [TOTVS RM Metadata API](https://tdn.totvs.com/display/LRM/API+Metadados)
