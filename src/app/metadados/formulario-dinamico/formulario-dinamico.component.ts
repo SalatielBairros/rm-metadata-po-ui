@@ -54,7 +54,7 @@ export class FormularioDinamicoComponent implements OnInit {
 
     if (Object.keys(this._errosFormulasVisuais).length > 0) {
       this._notification.warning(
-        'Salvo com ressalvas: erro nas validações das fórmulas visuais.'
+        'Registro será salvo com ressalvas: erro nas validações das fórmulas visuais.'
       );
     }
 
@@ -120,6 +120,8 @@ export class FormularioDinamicoComponent implements OnInit {
       this._metadados.obter(this._idRegistro, this._idProjeto).subscribe(
         (ret) => {
           this.model = ret;
+          this._atualizarCamposData();
+          this._atualizarSeletoresTipoNumerico();
         },
         (erro) => {
           console.error(erro);
@@ -199,5 +201,29 @@ export class FormularioDinamicoComponent implements OnInit {
 
       return x.required && estaVazio && x.visible && !x.disabled;
     });
+  }
+
+  private _atualizarCamposData() {
+    this.layout
+      .filter(
+        (x) =>
+          x.type === 'dateTime' &&
+          !!this.model[x.property]
+      )
+      .map((x) => x.property)
+      .forEach((x) => (this.model[x] = new Date(this.model[x])));
+  }
+
+  private _atualizarSeletoresTipoNumerico() {
+    this.layout
+      .filter(
+        (x) =>
+          (x.type === 'number' || x.type === 'string') &&
+          !!this.model[x.property] &&
+          !!x.options &&
+          !!x.options.length
+      )
+      .map((x) => x.property)
+      .forEach((x) => (this.model[x] = this.model[x].toString()));
   }
 }
