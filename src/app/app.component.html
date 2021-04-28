@@ -1,7 +1,14 @@
 <div class="po-wrapper">
   <po-toolbar p-title="PO-UI com RM Metadados"></po-toolbar>
 
-  <po-menu [p-menus]="menus"></po-menu>
+  <po-menu [p-menus]="menus" [p-filter]="true">
+    <ng-template p-menu-header-template>
+      <div class="header-menu">
+        <h2>Bem-vindo</h2>
+        <h4>Protótipo Metadados com PO-UI</h4>
+      </div>
+    </ng-template>
+  </po-menu>
 
   <div id="main-container">
     <router-outlet></router-outlet>

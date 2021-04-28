@@ -9,19 +9,33 @@ import { MetadadosService } from './metadados/metadados.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  public menus: Array<PoMenuItem> = [];
+  public menus: Array<PoMenuItem> = [
+    <PoMenuItem>{
+      label: 'Home',
+      link: '/',
+    },
+  ];
 
   constructor(private metadataSerivce: MetadadosService) {}
 
   public ngOnInit() {
     this.metadataSerivce.obterListaFormularios().subscribe((formularios) => {
-      this.menus = formularios.map(
+      this.menus = [
+        <PoMenuItem>{
+          label: 'Home',
+          link: '',
+        },
+      ];
+
+      const menusFormularios = formularios.map(
         (f) =>
           <PoMenuItem>{
             label: f.description,
-            link: `/metadados/${f.apiRoute}`
+            link: `/metadados/${f.apiRoute}`,
           }
       );
+
+      this.menus.push(...menusFormularios);
     });
   }
 }

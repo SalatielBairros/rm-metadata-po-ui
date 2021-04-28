@@ -30,4 +30,19 @@ export class BaseHttpService {
     const url = `${this.config.apiUrl}/${route}`;
     return this._http.get<T>(url, this._httpOptions);
   }
+
+  public post<T>(route: string, model: T): Observable<T>{
+    const url = `${this.config.apiUrl}/${route}`;
+    return this._http.post<T>(url, model, this._httpOptions);
+  }
+
+  public put<T>(route: string, chave:string, model: T): Observable<T>{
+    const url = `${this.config.apiUrl}/${route}/${chave}`;
+    return this._http.put<T>(url, model, this._httpOptions);
+  }
+
+  public delete(route: string, chave:string): Observable<any>{
+    const url = `${this.config.apiUrl}/${route}/${chave}`;
+    return this._http.delete(url, this._httpOptions);
+  }
 }

@@ -47,11 +47,11 @@ export class MetadadosService {
             }
 
             if (!!f.validate) {
-              f.validate = `${this._http.config.apiUrl}${this._frameworkApiUrl}/${f.validate}`;
+              f.validate = `${this._http.config.apiUrl}/${this._frameworkApiUrl}/${f.validate}`;
             }
 
             if (!!f.searchService) {
-              f.searchService = `${this._http.config.apiUrl}${this._frameworkApiUrl}/${f.searchService}`;
+              f.searchService = `${this._http.config.apiUrl}/${this._frameworkApiUrl}/${f.searchService}`;
             }
 
             return f;
@@ -71,12 +71,46 @@ export class MetadadosService {
       );
   }
 
-  public obterTodos(
-    projeto: string,
-  ): Observable<any> {
-
+  public obterTodos(projeto: string): Observable<any> {
     const uri = `framework/v1/metadata/data/${projeto}`;
     return this._http.get(uri);
+  }
+
+  public obter(chavePrivaria: string, projeto: string): Observable<any> {
+    return this._http.get(
+      `framework/v1/metadata/data/${projeto}/${chavePrivaria}`
+    );
+  }
+
+  public salvar(
+    chavePrimaria: string,
+    dado: any,
+    projeto: string
+  ): Observable<any> {
+    if (chavePrimaria.length > 0) {
+      return this._atualizar(chavePrimaria, dado, projeto);
+    } else {
+      return this._criar(dado, projeto);
+    }
+  }
+
+  private _criar(dado: any, projeto: string): Observable<any> {
+    return this._http.post(`framework/v1/metadata/data/${projeto}`, dado);
+  }
+
+  private _atualizar(chavePrivaria: string, dado: any, projeto: string) {
+    return this._http.put(
+      `framework/v1/metadata/data/${projeto}`,
+      chavePrivaria,
+      dado
+    );
+  }
+
+  public deletar(chavePrimaria: string, projeto: string): Observable<any> {
+    return this._http.delete(
+      `framework/v1/metadata/data/${projeto}`,
+      chavePrimaria
+    );
   }
 
   // public obterTituloMetadado(projeto: string) {
