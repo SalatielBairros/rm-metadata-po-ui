@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "doc": "npx compodoc -p tsconfig.doc.json",
-    "doc:open": "compodoc -s -d ./documentation --port 8081"
+    "doc": "npx compodoc -p tsconfig.doc.json -d ./docs",
+    "doc:open": "compodoc -s -d ./docs --port 8081"
   },
   "private": true,
   "dependencies": {
